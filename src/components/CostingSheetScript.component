@@ -1,0 +1,128 @@
+<!--
+ - Created by waqasali on 9/9/18.
+ -->
+
+<apex:component id="CostingSheetScript">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        j$ = jQuery.noConflict();
+
+
+        function nextTab(isSuccessful, tabNumber){
+            if(tabNumber>1){
+                  $('.tab1').removeClass('slds-is-active');
+            }
+            var nextTabNumber = tabNumber;
+            var preTabNumber = tabNumber - 1;
+            if(isSuccessful == true){
+                 $('.tab'+preTabNumber).removeClass('slds-is-active');
+                 $('.tab'+nextTabNumber).addClass('slds-is-active');
+                 $('.tabDetail'+preTabNumber).removeClass('slds-show');
+                 $('.tabDetail'+preTabNumber).addClass('slds-hide');
+                 $('.tabDetail'+nextTabNumber).removeClass('slds-hide');
+                 $('.tabDetail'+nextTabNumber).addClass('slds-show');
+            }
+        }
+
+        function nextTabCheck(isSuccessful, tabNumber){
+            if(tabNumber>1){
+                  $('.tab1').removeClass('slds-is-active');
+            }
+
+            if(isSuccessful == false){
+                tabNumber = tabNumber - 1;
+                var nextTabNumber = tabNumber;
+                var preTabNumber = tabNumber - 1;
+                 $('.tab'+preTabNumber).removeClass('slds-is-active');
+                 $('.tab'+nextTabNumber).addClass('slds-is-active');
+                 $('.tabDetail'+preTabNumber).removeClass('slds-show');
+                 $('.tabDetail'+preTabNumber).addClass('slds-hide');
+                 $('.tabDetail'+nextTabNumber).removeClass('slds-hide');
+                 $('.tabDetail'+nextTabNumber).addClass('slds-show');
+            }else{
+                nextTab(isSuccessful, tabNumber);
+            }
+        }
+
+        function backTab(tabNumber){
+            if(tabNumber>1){
+                  $('.tab1').removeClass('slds-is-active');
+            }
+            var preTabNumber = tabNumber;
+            var nextTabNumber = tabNumber + 1;
+                 $('.tab'+nextTabNumber).removeClass('slds-is-active');
+                 $('.tab'+preTabNumber).addClass('slds-is-active');
+                 $('.tabDetail'+nextTabNumber).removeClass('slds-show');
+                 $('.tabDetail'+nextTabNumber).addClass('slds-hide');
+                 $('.tabDetail'+preTabNumber).removeClass('slds-hide');
+                 $('.tabDetail'+preTabNumber).addClass('slds-show');
+        }
+        function ApplyMarkup(markupValue){
+            if(markupValue>0){
+                  ApplyMarkup(markupValue);
+            }
+        }
+
+     function closeMessage(){
+            j$('#dvMessage').hide();
+            return false;
+        };
+
+
+        function UpdateCTCAndAnnualCost(entity, category, rowNum, Quantity, UnitPrice){
+            var monthCTC = '<div class="slds-truncate" title="">'+
+                + (Quantity * UnitPrice).toFixed(2) +
+             '</div>';
+             var annualCost = '<div class="slds-truncate" title="">'+
+                 + (12 * Quantity * UnitPrice).toFixed(2) +
+             '</div>';
+
+              var table = document.getElementById("ManpowerRequirement"+entity);
+
+            var monthCell  = table.rows[rowNum].cells[2];
+            var annualCell  = table.rows[rowNum].cells[3];
+            monthCell.innerHTML = monthCTC;
+            annualCell.innerHTML = annualCost;
+
+
+            var totalRows = table.rows.length;
+
+            for(rowNumber = 0 ; rowNumber<totalRows; rowNumber++){
+                console.log('rowNumber = '+rowNumber);
+//                console.log('row QUANTITY  = '+table.rows[rowNumber].cells[2].innerText);
+//                console.log('row CTC MONTH  = '+table.rows[rowNumber].cells[2].innerText);
+//                console.log('row ANNUAL COST  = '+table.rows[rowNumber].cells[3].innerText);
+                console.log('category ='+category);
+                if(table.rows[rowNumber].Id == category){
+                    alert(''+rowNumber);
+                }
+            }
+           }
+
+
+
+
+
+
+    </script>
+
+    <!--  <script>
+                      $('.slds-tabs_default__link,.slds-tabs&#45;&#45;scoped__link').click(function(){
+                          $(this).parent().parent().find('.slds-tabs&#45;&#45;default__link,.slds-tabs&#45;&#45;scoped__link').attr('aria-selected','false');
+                          $(this).parent().parent().find('.slds-tabs_default__item').removeClass('slds-is-active');
+                          $(this).attr('aria-selected','true');
+                          $(this).parent().parent().find('.slds-tabs&#45;&#45;default__link,.slds-tabs&#45;&#45;scoped__link').attr('tabindex','-1');
+                          $(this).attr('tabindex','0');
+                          $(this).parent().addClass('slds-active').siblings().removeClass('slds-active');
+                          $(this).parent().parent().parent().find('.'+$(this).parent().parent().parent().find('.slds-tabs_default__content,.slds-tabs&#45;&#45;scoped__content')[0].classList[0]).removeClass('slds-show').addClass('slds-hide');
+                          $(this).parent().parent().parent().find('#'+$(this).attr('aria-controls')).removeClass('slds-hide').addClass('slds-show');
+                      });
+
+
+
+
+          </script>-->
+
+</apex:component>

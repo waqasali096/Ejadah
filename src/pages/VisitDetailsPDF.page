@@ -1,0 +1,524 @@
+<apex:page id="VisitDetailsPDF" applyBodyTag="false" applyHtmlTag="false" standardController="Site_Visit__c"  extensions="SiteVisitDetailsController" showHeader="false"
+           sideBar="false" renderAs="pdf">
+    <head>
+        <style>
+            @page {
+            size:A4;
+		    margin-left: 30px;
+            margin-right: 30px;
+            margin-top: -5px;
+            margin-bottom: 15px ;
+            text-align:left;
+            }
+            .full{
+            font-family:"Arial", Times, serif;
+            color:534D4C;
+            font-size:200px;
+            }
+            
+            .HeaderLeft{
+            float:left;
+            
+            width:350px;
+            margin-top:80px;
+            
+            
+            }
+            .HeaderRight{
+            float:right;
+            
+            margin-top:0px;
+            padding-top:20px;
+            width:350px;
+            padding-bottom:50px;
+            }
+            
+            .left{
+            float:left;
+            }
+            .right{
+            float:right;
+            
+            padding-top:0px;
+            padding-left:5px;
+            }
+            .TableClass{
+            
+            padding-top:380px;
+            }
+            table {
+            border-collapse: collapse;
+            }
+            
+            .tab1 th,td {
+            border-bottom: 1px solid #cecfd5;
+            padding: 10px 15px;
+            }
+            .tab1 th {
+            font-weight: bold;
+            }
+            .tab1 tfoot{
+            text-align: right;
+            }
+            .tab1 tfoot tr:last-child td {
+            border-bottom: 0;
+            }
+            .terms{
+            border-bottom: 1px solid #cecfd5;
+            }
+            .tableF{
+            width:730px;
+            height:200px;
+            }
+            .tableF td,th,tr{
+            margin-top:-20px;
+            padding:0px 15px;
+            height:10px;
+            border: 1px solid black;
+            }
+            
+            table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            font-size: 15px;
+            }
+            
+            panelInfo {
+            font-size: 100%;
+            background:#666666;
+            }
+            
+            .odd {
+            border-bottom: 1px solid #000;
+            background-color: #ECE5B6;
+            padding: 1px 1px 2px 2px;
+            font-size: 100%;
+            }
+            
+            .even {
+            border-bottom: 1px solid #000;
+            padding: 1px 1px 2px 2px;
+            font-size: 100%;
+            }
+            
+            
+            
+        </style>
+    </head>
+    
+    <apex:form id="form1">
+        
+        <div>
+            
+            <div>
+                <!--<apex:image url="{!URLFOR($Resource.CostingSheet, 'Images/Ejadah.png')}" width="230"-->
+                <!--height="60"/> <br/>-->
+                <apex:image url="{! if (SV.Entity__c == Null ,URLFOR($Resource.CostingSheet, 'Images/Ejadah.png'),URLFOR($Resource.CostingSheet, 'Images/'+SV.Entity__c+'.jpg')) }"
+                            style="margin-left:15px; margin-bottom:5px; margin-top:-5px" height="40px;"
+                            width="100px;"/>
+            </div>
+            
+            <header>
+                <h3  style="background-color:#d9d9d9;font-size:25px; text-align:center" width="70%"  >
+                    Site Visit Information
+                </h3>
+            </header>
+            
+            <div aria-hidden="false" id="expando-unique-id">
+                
+                <table class="table" >
+                    <!--<tr>-->
+                    <!--<th colspan="6"  style="background-color:#d9d9d9">Site Visit Information Collection</th>-->
+                    <!--</tr>-->
+                    <tr>
+                        <!--<td colspan="1" >Name of the Building</td>-->
+                        <!--<td colspan="2" ><apex:outputText value="{!SV.Name_of_the_building__c}" rendered="{!showAsOutput}"/></td>-->
+                        
+                        
+                        <td colspan="1" width="25%" >Site Visit Done by</td>
+                        <td colspan="2" width="30%" ><apex:outputText value="{!SV.User__r.Name}" rendered="{!showAsOutput}"/></td>
+                        
+                        
+                        <td width="15%">Date of Visit</td>
+                        <td colspan="1" width="30%"><apex:outputText value="{!SV.Date_of_Visit__c}" rendered="{!showAsOutput}"/></td>
+                        
+                    </tr>
+                    <tr>
+                        <!--<td colspan="2">Location</td>-->
+                        <!--<td><apex:outputText value="{!SV.Location__c}" rendered="{!showAsOutput}"/></td>-->
+                        
+                        <td colspan="1" width="30%"> Contact Details of Sup/Tech at Site</td>
+                        <td colspan="5" width="50%"><apex:outputText value="{!SV.Contact_details_of_Sup_Tech_at_site__r.Name}" rendered="{!showAsOutput}"/></td>
+                        
+                    </tr>
+                    
+                </table>
+                <br/>
+                
+                
+                
+                    
+                    <!--<div >-->
+                    <!--<div  style="padding:0.5rem; " >-->
+                    <!--<label style="0 0 0 110px">-->
+                    <!--Name of the building - -->
+                    <!--</label>-->
+                    <!--<apex:outputText style="margin: -5px 0 0 29px" value="{!SV.Name_of_the_building__c}" rendered="{!showAsOutput}"/>-->
+                    <!--<br/><br/>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    
+                    
+                    <!---->
+                    <!--<p style="margin: -18px 0 0 239px">{!finalTotalPrice}</p>-->
+                    
+                    <!--<div >-->
+                    <!--<div  style="padding:0.5rem;">-->
+                    <!--<label >-->
+                    <!--Date of Visit - -->
+                    <!--</label>-->
+                    <!--<apex:outputText value="{!SV.Date_of_Visit__c}" rendered="{!showAsOutput}"/>-->
+                    <!--<br/><br/>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    
+                    <!--<div >-->
+                    <!--<div  style="padding:0.5rem;">-->
+                    <!--<label >-->
+                    <!--Location - -->
+                    <!--</label>-->
+                    <!--<apex:outputText value="{!SV.Location__c}" rendered="{!showAsOutput}"/>-->
+                    <!--<br/><br/>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    
+                    <!--<div>-->
+                    <!--<div style="padding:0.5rem;">-->
+                    <!--<label >-->
+                    <!--Contact details of Sup/Tech at site - -->
+                    <!--</label>-->
+                    <!--<apex:outputText value="{!SV.Contact_details_of_Sup_Tech_at_site__c}" rendered="{!showAsOutput}"/>-->
+                    <!--<br/><br/>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    
+                    
+                    
+                    
+                    
+                    <h3 style="background-color:#d9d9d9 ;font-size:25px ; text-align:center" >
+                        General Information
+                    </h3>
+                    <apex:panelGrid columns="2" width="100%" styleClass="panelInfo">
+                        <label >
+                            <!--No of Floors - -->
+                            Number of buildings -
+                        </label>
+                        <apex:outputText value="{!Sv.No_of_Floors__c}" rendered="{!showAsOutput}"/>
+                        <label >
+                            Size of Building (SQM Approx) -
+                        </label>
+                        <apex:outputText value="{!Sv.Size_of_Building_SQM_Approx__c}" rendered="{!showAsOutput}"/>
+                        <label >
+                            <!--No of Floors - -->
+                            Number of buildings -
+                        </label>
+                        <apex:outputText value="{!Sv.No_of_Floors__c}" rendered="{!showAsOutput}"/>
+                        <label >
+                            Size of Building (SQM Approx) -
+                        </label>
+                        <apex:outputText value="{!Sv.Size_of_Building_SQM_Approx__c}" rendered="{!showAsOutput}"/>
+                        <label >
+                            Age of Building -
+                        </label>
+                        <apex:outputText value="{!Sv.Age_of_Building__c}" rendered="{!showAsOutput}"/>
+                        <label >
+                            Condition of Building -
+                        </label>
+                        <apex:outputText value="{!Sv.Condition_of_Building__c}" rendered="{!showAsOutput}"/>
+                        <label >
+                            Working Hours -
+                        </label>
+                        <apex:outputText value="{!Sv.Working_Hours__c}" rendered="{!showAsOutput}"/>
+                    
+                    <label >
+                        Any Restriction for Gender of Technician -
+                    </label>
+                    <apex:outputText value="{!Sv.Any_Restriction_for_Gender_of_Technician__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        No Of Offc's for Offc/Mixed Use Bldg -
+                    </label>
+                    <apex:outputText value="{!Sv.No_Of_Offcs_for_OffcMixed_Use_Bldg__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        No of Technicians Currently on Site -
+                    </label>
+                    <apex:outputText value="{!Sv.No_of_Technicians_Currently_on_site__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        No of Technicians Suggested by the Visitor to Run the Operations -
+                    </label>
+                    <apex:outputText value="{!Sv.No_Of_Tech_Suggstd_by_Vstr_to_run_Opn__c}" rendered="{!showAsOutput}"/>
+                    </apex:panelGrid>
+                    <apex:panelGrid columns="1" width="100%" style="Align:Center"><Label>
+                        Number of Apartments for Residential Buildings </Label>
+                    </apex:panelGrid>
+                    <apex:panelGrid columns="2" width="100%">
+                        <label >
+                            1BR -
+                        </label>
+                        
+                        <apex:outputText value="{!Sv.XBR_1BR_Apartment__c}" rendered="{!showAsOutput}"/>
+                        <label >
+                            2BR -
+                        </label>
+                        
+                        <apex:outputText value="{!Sv.XBR_2BR_Apartment__c}" rendered="{!showAsOutput}"/>
+                        <label >
+                            3BR -
+                        </label>
+                        
+                        <apex:outputText value="{!Sv.XBR_3BR_Apartment__c}" rendered="{!showAsOutput}"/>
+                        
+                    </apex:panelGrid>
+            </div><br/><br/>
+           <!--<div class="TableClass">-->
+                <header><h3  style="background-color:#d9d9d9;font-size:25px; text-align:center">
+                    <span  title="Section Title" >Specialized Subcontractors Information</span>
+                    </h3></header> <br/>
+                <div>
+                <table >
+                    <thead style="color:#ffffff;background:#666666;font-size:13px; font-size:10">
+                        
+                        <tr >
+                            <th scope="col">
+                                Asset/System Name
+                            </th >
+                            
+                            <th scope="col"  >
+                                Present at Site
+                            </th>
+                            <th scope="col" >
+                                Quantity
+                            </th>
+                            
+                            <th scope="col" >
+                                Make
+                            </th>
+                            <th scope="col" >
+                                Capacity
+                            </th>
+                            <th  scope="col">
+                                Name of Existing Subcontractor
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!SVDLST}" var="Abc">
+                            <tr>
+                                <td width = "10%" style ="text-align:left;" >
+                                    <b> <apex:outputText value="{!Abc.Name}" /><br /> </b>
+                                    <!--<td  width = "30%" style ="text-align:left;">  <apex:outputText value="{!Abc.Name}"/> </td>-->
+                                    
+                                </td>
+                                
+                                <td  width = "5%" style ="text-align:left;">
+                                    
+                                    <apex:outputText value="{!IF(Abc.Present_at_Site_Yes_No__c  ,'Yes','No')}" /><br />
+                                    
+                                    
+                                </td>
+                                
+                                <td  width = "5%" style ="text-align:left;">
+                                    <apex:outputText value="{!Abc.Quantity__c}" /><br />
+                                    
+                                </td>
+                                
+                                <td  width = "5%" style ="text-align:left;">
+                                    <apex:outputText value="{!Abc.Make__c}" /><br />
+                                    
+                                </td>
+                                
+                                <td  width = "3%" style ="text-align:left;">
+                                    <apex:outputText value="{!Abc.Capacity__c}" /><br />
+                                    
+                                </td>
+                                
+                                <td  width = "10%" style ="text-align:left;">
+                                    <apex:outputText value="{!Abc.Name_of_Existing_Subcontractor__c}" /><br />
+                                    
+                                </td>
+                                
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </div>
+           <!-- </div>-->
+            
+            <br/>
+            <h3 style="background-color:#d9d9d9;font-size:25px; text-align:center">
+                <span  title="Soft Services Information">Soft Services Information</span>
+            </h3>
+            
+            
+            
+            <table class="TableClass">
+                <thead style="color:#ffffff;background:#666666;font-size:13px;">
+                    
+                    <tr >
+                        
+                        <th>
+                            Service
+                        </th>
+                        
+                        <th  >
+                            Number of Existing Staff
+                        </th>
+                        
+                        <th   >
+                            Working Hours
+                        </th>
+                        <th  >
+                            No of Skips for WM
+                        </th>
+                        
+                        <th >
+                            Size of Skips for WM
+                        </th>
+                        <th>
+                            Removal Frequency for WM
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <apex:repeat value="{!Srvc}" var="Services" >
+                        
+                        <tr>
+                            <td scope="row" data-label="">
+                                <b> <apex:outputText value="{!Services.Name}" /> </b>
+                                
+                            </td>
+                            <td scope="row" data-label="">
+                                <apex:outputText value="{!Services.No_of_Existing_Staff__c}" rendered="{!showAsOutput}"/>
+                                
+                            </td>
+                            <td scope="row" data-label="">
+                                <apex:outputText value="{!Services.Working_Hours__c}" rendered="{!showAsOutput}"/>
+                                
+                            </td>
+                            <td scope="row" data-label="">
+                                <apex:outputText value="{!Services.No_of_Skips_for_WM__c}" rendered="{!showAsOutput}"/>
+                                
+                            </td>
+                            <td scope="row" data-label="">
+                                <apex:outputText value="{!Services.Size_of_Skips_for_WM__c}" rendered="{!showAsOutput}"/>
+                                
+                            </td>
+                            <td scope="row" data-label="">
+                                <apex:outputText value="{!Services.Removal_Frequency_for_WM__c}" rendered="{!showAsOutput}"/>
+                                
+                            </td>
+                            
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+            
+            <br/>
+            
+            <div >
+                
+                <h3 style="background-color:#d9d9d9;font-size:25px; text-align:center">
+                    Cleaning Equipment, Consumables and Toiletries Information
+                </h3>
+                
+                <apex:panelGrid columns="2" width="100%" styleClass="panelInfo">
+                    <label >
+                        Cleaning Chemicals Quantities -
+                    </label>
+                    <apex:outputText value="{!SV.Cleaning_Chemicals_Quantities__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        Cleaning Chemicals Cost -
+                    </label>
+                    <apex:outputText value="{!SV.Cleaning_Chemicals__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        Consumables Quantities -
+                    </label>
+                    <apex:outputText value="{!SV.Consumables_Quantities__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        Consumables Cost -
+                    </label>
+                    <apex:outputText value="{!SV.Consumables_Cost__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        No Of Male Toilets / Cubicles -
+                    </label>
+                    <apex:outputText value="{!SV.No_Of_Male_Toilets_Cubicles__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        No Of Female Toilets / Cubicles -
+                    </label>
+                    <apex:outputText value="{!SV.No_Of_Female_Toilets_Cubicles__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        Type of Floor -
+                    </label>
+                    <apex:outputText value="{!SV.Type_of_Floor__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        Dispensers for Toiletries Installed -
+                    </label>
+                    <apex:outputText value="{!SV.Dispensers_for_Toiletries_Installed__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        No of Visitors (Foot Fall) / Day -
+                    </label>
+                    <apex:outputText value="{!SV.No_of_Visitors_Foot_Fall_Day__c}" rendered="{!showAsOutput}"/>
+                    <label >
+                        Equipment Required -
+                    </label>
+                    <apex:outputText value="{!SV.Equipment_Required__c}" rendered="{!showAsOutput}"/>
+                </apex:panelGrid>
+ 
+            </div>
+   <div >
+                
+                <h3 style="background-color:#d9d9d9;font-size:25px; text-align:center">
+                    General Observations/Remarks
+                </h3>
+                <apex:panelGrid columns="1" width="100%">
+                <apex:outputField value="{!SV.General_Observations_Remarks__c}" rendered="{!showAsOutput}"/>
+                </apex:panelGrid>
+                
+                
+                <h3 style="background-color:#d9d9d9;font-size:25px; text-align:center">
+                    Big Remarks
+                </h3>
+                <apex:panelGrid columns="1" styleClass="panelInfo" width="100%">
+                <apex:outputField value="{!SV.Big_Remark__c}" rendered="{!showAsOutput}"/>
+       			</apex:panelGrid>
+                
+            </div>
+            
+            <!--<h3 style="background-color:#d9d9d9;font-size:25px; text-align:center">-->
+            <!--Big Remarks-->
+            <!--</h3>-->
+            
+            <!--<div  style="padding:0.5rem;">-->
+            <!--<apex:outputText value="{!SV.Big_Remark__c}" rendered="{!showAsOutput}"/>-->
+            <!--</div>-->
+            
+            <!--<h3 style="background-color:#d9d9d9;font-size:25px; text-align:center">-->
+            <!--General Observations/Remarks-->
+            <!--</h3>-->
+            
+            <!--<div  style="padding:0.5rem;">-->
+            <!--<apex:outputText value="{!SV.General_Observations_Remarks__c}" rendered="{!showAsOutput}"/>-->
+            <!--</div>-->
+            
+            
+            
+            
+        </div>
+        
+    </apex:form>
+    
+    
+    
+</apex:page>

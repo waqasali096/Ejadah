@@ -1,0 +1,607 @@
+<!--
+ - Created by waqasali on 9/19/18.
+ -->
+
+<apex:page standardController="Costing_Summary__c" lightningStyleSheets="false"
+           extensions="CostingSummaryController"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" sideBar="false" docType="html-5.0" title="Costing Sheet">
+
+    <head title="Costing Sheet">
+        <meta charset="utf-8"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <apex:slds />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <style>
+        .slds-truncate{
+            white-space: normal !important;
+            text-align: center !important;
+        }
+
+
+        </style>
+        <style type="text/css">
+        .dateFormat{
+           visibility:hidden;
+        }
+
+
+        </style>
+
+    </head>
+    <body>
+
+    <apex:form id="theForm">
+
+
+        <div class="slds-scope" style="margin-left:1%; margin-right:1%; margin-top:10px; margin-bottom:30px;" >
+
+
+            <div style="height:65px; background-color: #f9f9f9; ">
+
+                <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                    <div class="slds-size_1-of-3">
+                        <apex:image url="{!URLFOR($Resource.CostingSheet, 'Images/Ejadah.png')}" width="150"
+                                    height="80"/>
+                    </div>
+                    <div class="slds-size_1-of-3" style="text-align:center; margin-top:5px;">
+                        <div class="slds-text-heading_medium">Costing Sheet</div>
+                        <div>
+                            <a style="font-size: 16px; text-transform:uppercase;" href="/{!costingSummary.Id}"
+                               target="_blank">{!costingSummary.Name}</a>
+                        </div>
+                    </div>
+                    <div class="slds-size_1-of-3" style="text-align:right; padding-right:5px;">
+
+                        <div style="margin-top:12px;">Opportunity Owner</div>
+                        <a style="font-size: 13px; " href="/{!costingSummary.Id}"
+                           target="_blank">{!costingSummary.Name}</a>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="slds-card" style="margin-top:10px;">
+
+                <div class="slds-card__body slds-box">
+                    <apex:repeat value="{!costingSummary}" var="summary">
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade" style="margin-top:-15px;">
+            <span class="slds-truncate slds-p-horizontal_small"
+                  title="Section Title"
+                  style="margin-left:5px;">Summary Details</span>
+                            </h3>
+
+                            <div aria-hidden="false" class="slds-section__content">
+
+                                <div class="slds-box slds-m-vertical_small" style="margin-top:0px;">
+                                    <div class="slds-col slds-size_1-of-1">
+
+                                        <div class="demo-only demo-only--sizing slds-grid slds-wrap"
+                                             style="width:80%; margin: 0 auto; margin-top:-15px;">
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--5-of-12">
+                                                <div class="slds-form-element slds-p-around--medium"
+                                                     style="padding:0.5rem;">
+                                                    <label class="slds-form-element__label">
+                                                        Client
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField styleClass="slds-input"
+                                                                          value="{!summary.Account__c}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-12">
+                                            </div>
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--5-of-12">
+                                                <div class="slds-form-element slds-p-around--medium"
+                                                     style="padding:0.5rem;">
+                                                    <label class="slds-form-element__label">
+                                                        Geography
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField styleClass="slds-input"
+                                                                          value="{!summary.Geography__c}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--5-of-12">
+                                                <div class="slds-form-element slds-p-around--medium"
+                                                     style="padding:0.5rem;">
+                                                    <label class="slds-form-element__label">
+                                                        Project
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField styleClass="slds-input"
+                                                                          value="{!summary.Project__c}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-12">
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--5-of-12">
+                                                <div class="slds-form-element slds-p-around--medium"
+                                                     style="padding:0.5rem;">
+                                                    <label class="slds-form-element__label">
+                                                        Tender Bond
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField styleClass="slds-input"
+                                                                          value="{!summary.Tender_bond__c}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--5-of-12">
+                                                <div class="slds-form-element slds-p-around--medium"
+                                                     style="padding:0.5rem;">
+                                                    <label class="slds-form-element__label">
+                                                        Closing Date
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField styleClass="slds-input"
+                                                                          value="{!summary.Closing_Date__c}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-12">
+                                            </div>
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--5-of-12">
+                                                <div class="slds-form-element slds-p-around--medium"
+                                                     style="padding:0.5rem;">
+                                                    <label class="slds-form-element__label">
+                                                        SOW
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField styleClass="slds-input"
+                                                                          value="{!summary.SOW__c}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--5-of-12">
+
+                                            </div>
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-12">
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--5-of-12">
+                                                <div class="slds-form-element slds-p-around--medium"
+                                                     style="padding:0.5rem;">
+                                                    <label class="slds-form-element__label">
+                                                        Document Date
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField styleClass="slds-input"
+                                                                          value="{!summary.Document_Date__c}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <apex:outputPanel Id="PricingSummary">
+                            <div class="slds-section slds-is-open" style="margin-top:15px;">
+                                <h3 class="slds-section__title slds-theme_shade">
+            <span class="slds-truncate slds-p-horizontal_small"
+                  title="Section Title"
+                  style="margin-left:5px;">Pricing Summary</span>
+                                </h3>
+                                <div aria-hidden="false" class="slds-section__content">
+
+                                    <apex:variable value="{!0}" var="grandCostMonth"/>
+                                    <apex:variable value="{!0}" var="grandCostYear"/>
+                                    <apex:variable value="{!0}" var="grandMarkup"/>
+                                    <apex:variable value="{!0}" var="grandSellingPrice"/>
+
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                        <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th scope="col" style="height: 2.5rem;">
+                                                <div class="slds-col" title=""></div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="">Cost/Month</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="">Cost/Year</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="">Mark Up % + VAT
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="">Mark Up</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="">Selling Price</div>
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                        <apex:repeat value="{!CategoryList}" var="category">
+
+
+                                            <tr style="background-color:#f9f9f9;">
+                                                <th scope="row" data-label="">
+                                                    <div class="slds-truncate" title=""
+                                                         style="height:25px; margin-top:12px;">
+                                                        <strong>
+                                                            <div style="text-align:left; margin-right:10px;">{!category.Category}</div>
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                                <th colspan="25"></th>
+                                            </tr>
+
+
+                                            <apex:variable value="{!0}" var="totalCostMonth"/>
+                                            <apex:variable value="{!0}" var="totalCostYear"/>
+                                            <apex:variable value="{!0}" var="totalMarkup"/>
+                                            <apex:variable value="{!0}" var="totalSellingPrice"/>
+                                            <apex:repeat value="{!category.SummaryLineItemsList}"
+                                                         var="Product">
+                                                <tr id="{!category.Category}">
+                                                    <th scope="row" data-label="">
+                                                        <div title="">
+                                                            <apex:outputText value="{!Product.Name}"/>
+
+                                                        </div>
+                                                    </th>
+
+                                                    <th scope="row" data-label="">
+                                                        <div class="slds-truncate" title="">
+                                                            <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                                <apex:param value="{!Product.Cost_Month__c}"/>
+                                                            </apex:outputText>
+
+                                                        </div>
+                                                    </th>
+                                                    <th scope="row" data-label="">
+                                                        <div class="slds-truncate" title="">
+                                                            <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                                <apex:param value="{!Product.Cost_Year__c}"/>
+                                                            </apex:outputText>
+
+                                                        </div>
+                                                    </th>
+                                                    <th scope="row" data-label="">
+                                                        <div class="slds-truncate" title="">
+                                                            <apex:outputField value="{!Product.Mark_Up_VAT__c}"
+                                                                    styleClass="slds-input"/>
+
+                                                        </div>
+                                                    </th>
+                                                    <th scope="row" data-label="">
+                                                        <div class="slds-truncate" title="">
+                                                            <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                                <apex:param value="{!Product.Mark_Up__c}"/>
+                                                            </apex:outputText>
+                                                        </div>
+                                                    </th>
+                                                    <th scope="row" data-label="">
+                                                        <div class="slds-truncate" title="">
+                                                            <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                                <apex:param value="{!Product.Selling_Price__c}"/>
+                                                            </apex:outputText>
+                                                        </div>
+                                                    </th>
+                                                    <th></th>
+                                                    <apex:variable value="{!IF(Product.Cost_Month__c != null, Product.Cost_Month__c , 0) + totalCostMonth}"
+                                                            var="totalCostMonth"/>
+                                                    <apex:variable value="{!IF(Product.Cost_Year__c != null, Product.Cost_Year__c , 0) + totalCostYear}"
+                                                            var="totalCostYear"/>
+                                                    <apex:variable value="{!IF(Product.Mark_Up__c != null, Product.Mark_Up__c , 0) + totalMarkup}"
+                                                            var="totalMarkup"/>
+
+                                                    <apex:variable value="{!IF(Product.Selling_Price__c != null, Product.Selling_Price__c , 0) + totalSellingPrice}"
+                                                            var="totalSellingPrice"/>
+                                                </tr>
+                                            </apex:repeat>
+                                            <tr style="background-color:#f9f9f9;">
+                                                <th scope="row" data-label="">
+                                                    <div class="slds-truncate" title=""
+                                                         style="height: 1.8rem;">
+                                                        <strong>
+                                                            <div style="text-align:left; margin-right:10px; margin-top:10px;">
+                                                                TOTAL
+                                                            </div>
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                                <th scope="row" data-label="">
+                                                    <div class="slds-truncate" title="">
+                                                        <strong>
+                                                            <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                                <apex:param value="{!totalCostMonth}"/>
+                                                            </apex:outputText>
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                                <th scope="row" data-label="">
+                                                    <div class="slds-truncate" title="">
+                                                        <strong>
+                                                            <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                                <apex:param value="{!totalCostYear}"/>
+                                                            </apex:outputText>
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                                <th scope="row" data-label="">
+
+                                                </th>
+                                                <th scope="row" data-label="">
+                                                    <div class="slds-truncate" title="">
+                                                        <strong>
+                                                            <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                                <apex:param value="{!totalMarkup}"/>
+                                                            </apex:outputText>
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                                <th scope="row" data-label="">
+                                                    <div class="slds-truncate" title="">
+                                                        <strong>
+                                                            <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                                <apex:param value="{!totalSellingPrice}"/>
+                                                            </apex:outputText>
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                                <th colspan="25"></th>
+                                            </tr>
+                                            <tr style="height:15px;">
+                                                <th colspan="25"></th>
+                                            </tr>
+                                            <apex:variable value="{!IF(totalCostMonth != null, totalCostMonth , 0) + grandCostMonth}"
+                                                    var="grandCostMonth"/>
+                                            <apex:variable value="{!IF(totalCostYear != null, totalCostYear , 0) + grandCostYear}"
+                                                    var="grandCostYear"/>
+                                            <apex:variable value="{!IF(totalMarkup != null, totalMarkup , 0) + grandMarkup}"
+                                                    var="grandMarkup"/>
+
+                                            <apex:variable value="{!IF(totalSellingPrice != null, totalSellingPrice , 0) + grandSellingPrice}"
+                                                    var="grandSellingPrice"/>
+                                        </apex:repeat>
+
+
+                                        <tr style="background-color:#f9f9f9;">
+                                            <th scope="row" data-label="">
+                                                <div class="slds-truncate" title=""
+                                                     style="height: 1.8rem;">
+                                                    <strong>
+                                                        <div style="text-align:left; margin-right:10px; margin-top:10px;">
+                                                            <!--GRAND TOTALS-->
+                                                        </div>
+                                                    </strong>
+                                                </div>
+                                            </th>
+                                            <th scope="row" data-label="">
+                                                <div class="slds-truncate" title="">
+                                                    <strong>
+                                                        <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                            <apex:param value="{!grandCostMonth}"/>
+                                                        </apex:outputText>
+                                                    </strong>
+                                                </div>
+                                            </th>
+                                            <th scope="row" data-label="">
+                                                <div class="slds-truncate" title="">
+                                                    <strong>
+                                                        <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                            <apex:param value="{!grandCostYear}"/>
+                                                        </apex:outputText>
+                                                    </strong>
+                                                </div>
+                                            </th>
+                                            <th scope="row" data-label="">
+
+                                            </th>
+                                            <th scope="row" data-label="">
+                                                <div class="slds-truncate" title="">
+                                                    <strong>
+                                                        <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                            <apex:param value="{!grandMarkup}"/>
+                                                        </apex:outputText>
+                                                    </strong>
+                                                </div>
+                                            </th>
+                                            <th scope="row" data-label="">
+                                                <div class="slds-truncate" title="">
+                                                    <strong>
+                                                        <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                            <apex:param value="{!grandSellingPrice}"/>
+                                                        </apex:outputText>
+                                                    </strong>
+                                                </div>
+                                            </th>
+                                            <th colspan="25"></th>
+                                        </tr>
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <div class="slds-section slds-is-open" style="margin-top:20px;">
+                                <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                      title="Section Title">Total</span>
+                                </h3>
+                                <div aria-hidden="false" class="slds-section__content"
+                                     style="margin-top:-10px;">
+                                    <div class="slds-box slds-m-vertical_small"
+                                         style="margin-bottom:-10px;">
+
+                                        <table  style="margin-top:-15px;">
+                                            <tbody>
+                                            <tr>
+                                                <td rowspan="5" style="width:50%;">
+                                                    <div class="slds-form-element slds-p-around--medium"
+                                                         style="padding:0.5rem;">
+                                                        <label class="slds-form-element__label">
+                                                            <apex:outputText value="Remarks" rendered="{!summary.Remarks__c!=null}"/>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:outputText value="{!summary.Remarks__c}"/>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            <tr class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                                <td style="text-align:right;" >
+                                                    <strong><label
+                                                            class="slds-form-element__label">Total
+                                                        Cost:</label></strong>
+                                                </td>
+                                                <td style="text-align:left; margin-top:15px;">
+                                                    <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                        <apex:param value="{!grandCostYear}"/>
+                                                    </apex:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                                <td style="text-align:right;"><strong><label
+                                                        class="slds-form-element__label">Gross
+                                                    Profit: </label></strong></td>
+                                                <td style="text-align:left;">
+                                                    <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                        <apex:param value="{!grandSellingPrice - grandCostYear}"/>
+                                                    </apex:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                                <td style="text-align:right;"><strong><label
+                                                        class="slds-form-element__label">Selling
+                                                    Price:</label></strong></td>
+                                                <td style="text-align:left;">
+                                                    <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                        <apex:param value="{!grandSellingPrice}"/>
+                                                    </apex:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                                <td style="text-align:right;"><strong><label
+                                                        class="slds-form-element__label">Gross
+                                                    Margin:</label></strong>
+                                                </td>
+                                                <td style="text-align:left;">
+                                                    <apex:outputText value="{0, number, ###,###,##0.0000}">
+                                                        <apex:param value="{!IF(AND(grandSellingPrice != null, grandSellingPrice!= 0), ((grandSellingPrice - grandCostYear)/grandSellingPrice * 100) , 0)}"/>
+                                                    </apex:outputText>
+                                                    %
+                                                </td>
+                                            </tr>
+
+                                            </tbody>
+
+                                        </table>
+
+
+                                        <!--<div class="slds-col slds-size_1-of-1">-->
+
+                                        <!--<div class="demo-only demo-only&#45;&#45;sizing slds-grid slds-wrap">-->
+
+                                        <!--<div class="slds-size_9-of-12 slds-text-align_right">-->
+                                        <!--<strong><label-->
+                                        <!--class="slds-form-element__label">Total-->
+                                        <!--Cost:</label></strong>-->
+
+                                        <!--</div>-->
+                                        <!--<div class="slds-size_2-of-12"-->
+                                        <!--style="margin-left:10px;">-->
+                                        <!--<apex:outputText-->
+                                        <!--value="{0, number, ###,###,##0.0000}">-->
+                                        <!--<apex:param value="{!grandCostYear}"/>-->
+                                        <!--</apex:outputText>-->
+
+                                        <!--</div>-->
+
+                                        <!--<div class="slds-size_9-of-12 slds-text-align_right"-->
+                                        <!--style="margin-top:10px;">-->
+                                        <!--<strong><label class="slds-form-element__label">Gross-->
+                                        <!--Profit: </label></strong>-->
+
+                                        <!--</div>-->
+                                        <!--<div class="slds-size_2-of-12"-->
+                                        <!--style="margin-left:10px; margin-top:10px;">-->
+                                        <!--<apex:outputText-->
+                                        <!--value="{0, number, ###,###,##0.0000}">-->
+                                        <!--<apex:param-->
+                                        <!--value="{!grandSellingPrice - grandCostYear}"/>-->
+                                        <!--</apex:outputText>-->
+                                        <!--</div>-->
+
+                                        <!--<div class="slds-size_9-of-12 slds-text-align_right"-->
+                                        <!--style="margin-top:10px;">-->
+                                        <!--<strong><label class="slds-form-element__label">Selling-->
+                                        <!--Price:</label></strong>-->
+
+                                        <!--</div>-->
+                                        <!--<div class="slds-size_2-of-12"-->
+                                        <!--style="margin-left:10px; margin-top:10px;">-->
+                                        <!--<apex:outputText-->
+                                        <!--value="{0, number, ###,###,##0.0000}">-->
+                                        <!--<apex:param value="{!grandSellingPrice}"/>-->
+                                        <!--</apex:outputText>-->
+
+                                        <!--</div>-->
+
+                                        <!--<div class="slds-size_9-of-12 slds-text-align_right"-->
+                                        <!--style="margin-top:10px;">-->
+                                        <!--<strong><label class="slds-form-element__label">Gross-->
+                                        <!--Margin:</label></strong>-->
+
+                                        <!--</div>-->
+                                        <!--<div class="slds-size_2-of-12"-->
+                                        <!--style="margin-left:10px; margin-top:10px;">-->
+
+                                        <!--<apex:outputText-->
+                                        <!--value="{0, number, ###,###,##0.0000}">-->
+                                        <!--<apex:param-->
+                                        <!--value="{!IF(AND(grandSellingPrice != null, grandSellingPrice!= 0), ((grandSellingPrice - grandCostYear)/grandSellingPrice * 100) , 0)}"/>-->
+                                        <!--</apex:outputText>-->
+                                        <!--%-->
+
+                                        <!--</div>-->
+
+                                        <!--</div>-->
+
+                                        <!--</div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+
+
+                    </apex:repeat>
+                </div>
+            </div>
+
+
+        </div>
+
+    </apex:form>
+    </body>
+
+</apex:page>

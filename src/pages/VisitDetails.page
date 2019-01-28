@@ -1,0 +1,732 @@
+<apex:page title="Site Visit" id="VisitDetails" standardController="Site_Visit__c"  extensions="SiteVisitDetailsController" showHeader="false"
+           sideBar="false" Lightningstylesheets="true"  >
+    <head>
+        <style>
+            .dateFormat {display:none !important;}
+
+        </style>
+        <script>
+
+            function detailRecord(){
+                var url = '/apex/VisitDetailsPDF?Id='+{!Site_Visit__c.id}+'&oppid='+{!Site_Visit__c.Opportunity__c}';
+                alert(url);
+                sforce.one.navigateToURL(url);
+             }
+        </script>
+
+    </head>
+    <apex:slds />
+   <apex:form id="form1" >
+
+          <apex:actionStatus id="status" title="Please Wait">
+            <apex:facet name="start">
+                <div class="slds-spinner_container">
+                    <div role="status" class="slds-spinner slds-spinner--medium slds-spinner--brand">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+
+        <div class="slds-page-header" style="width:89%; margin: 0 auto;position: fixed;top: 0;left: 5.5%;z-index: 1;">
+            <div class="slds-media">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-orders"
+                          title="Description of icon when needed">
+                    <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:href="{!URLFOR($Asset.SLDS,'/assets/icons/standard-sprite/svg/symbols.svg#orders')}"/>
+                    </svg>
+                    </span>
+                </div>
+
+                <div class="slds-media__body" style="text-align: left;">
+                    <h1 class="slds-page-header__title slds-truncate slds-align-middle"
+                        title="">Site Visit Information Collection</h1>
+                    <!--<p class="slds-text-body_small slds-line-height_reset" style="margin-top:5px;">{!Sv.Working_Hours__c}</p> -->
+                </div>
+
+                <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
+                    <apex:commandButton styleClass="slds-button slds-button_brand" status="status" action="{!SaveItem}"
+                                            rendered="{!showAsInput}" reRender="form1" value="Save" />
+
+                    <apex:commandButton action="{!EditRecord}" rendered="{!showAsOutput}" value="Edit" styleClass="slds-button slds-button_brand"/>
+                    <!--<apex:commandButton   rendered="{!RenderAsPDF}" value="Generate PDF" styleClass="slds-button slds-button_brand"  onClick="alert('HI');detailRecord()"/>-->
+                    <apex:commandlink action="{!saveToPdf}" rendered="{!RenderAsPDF}" target="_blank" style="margin-left:10px; margin-right:10px;">
+                        <apex:commandButton value="Generate PDF" styleClass="slds-button slds-button_brand" />
+                    </apex:commandlink>
+                    <apex:commandButton action="{!cancel}" value="Cancel" styleClass="slds-button slds-button_brand"/>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="slds-section slds-is-open"
+             style="width:90%; margin: 0 auto; border:1px solid #f3f2f2;border-radius:20px;margin-top:100px;">
+
+            <apex:pageMessages />
+
+            <h3 class="slds-section__title">
+                <button aria-controls="expando-unique-id" aria-expanded="true" onclick="return false;"
+                        class="slds-button slds-section__title-action">
+                <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left"
+                         aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="{!URLFOR($Asset.SLDS,'/assets/icons/utility-sprite/svg/symbols.svg#switch')}"/>
+                    </svg>
+                    <span class="slds-truncate" title="Section Title">Site Visit Information</span>
+                </button>
+            </h3>
+
+            <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+
+                <div class="slds-grid slds-wrap">
+
+                    <!--<div class="slds-col slds-size&#45;&#45;1-of-1 slds-medium-size&#45;&#45;6-of-12">-->
+                        <!--<div class="slds-form-element slds-p-around&#45;&#45;medium" style="padding:0.5rem;">-->
+                            <!--<label class="slds-form-element__label">-->
+                                <!--Name of the building-->
+                            <!--</label>-->
+                            <!--<div class="slds-form-element__control">-->
+                                <!--<apex:inputField id="NameOfBuilding" styleClass="slds-input" value="{!SV.Name_of_the_building__c}"-->
+                                                 <!--rendered="{!showAsInput}"/>-->
+                                <!--<apex:outputField value="{!SV.Name_of_the_building__c}" rendered="{!showAsOutput}"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Building Type
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!SV.Building_Type__c	}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Building_Type__c	}" rendered="{!showAsOutput}"/>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+
+                            <label class="slds-form-element__label">
+                                Please Specify Other Building Type
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!SV.Other_BuildingnType__c	}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Other_BuildingnType__c	}" rendered="{!showAsOutput}"/>
+                           </div>
+                        </div>
+                    </div>
+
+
+                    <div class="slds-col slds-size--2-of-2 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Site Visit Done by
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField value="{!SV.User__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.User__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!--<div class="slds-col slds-size&#45;&#45;1-of-1 slds-medium-size&#45;&#45;6-of-12">-->
+                        <!--<div class="slds-form-element slds-p-around&#45;&#45;medium" style="padding:0.5rem;">-->
+                            <!--<label class="slds-form-element__label">-->
+                                <!--Location-->
+                            <!--</label>-->
+                            <!--<div class="slds-form-element__control">-->
+                                <!--<apex:inputField styleClass="slds-input"  value="{!SV.Location__c}" rendered="{!showAsInput}"/>-->
+                                <!--<apex:outputField value="{!SV.Location__c}" rendered="{!showAsOutput}"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Contact Details of The Supervisor / Techncian at Site
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField value="{!SV.Contact_details_of_Sup_Tech_at_site__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Contact_details_of_Sup_Tech_at_site__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Date of Visit
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-datepicker slds-input" value="{!SV.Date_of_Visit__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Date_of_Visit__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="slds-section slds-is-open"
+                         style="width:100%; margin: 0 auto; border:1px solid #f3f2f2;border-radius:20px;margin-top:10px;">
+
+                        <h3 class="slds-section__title">
+                            <button aria-controls="expando-unique-id" aria-expanded="true" onclick="return false;"
+                                    class="slds-button slds-section__title-action">
+                                <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left"
+                                     aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                         xlink:href="{!URLFOR($Asset.SLDS,'/assets/icons/utility-sprite/svg/symbols.svg#switch')}"/>
+                                </svg>
+                                <span class="slds-truncate" title="Section Title">General Information</span>
+                            </button>
+                        </h3>
+                    </div>
+
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                <!--No of Floors-->
+                                Number of buildings
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.No_of_Floors__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.No_of_Floors__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Size of Building (SQM Approx)
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.Size_of_Building_SQM_Approx__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.Size_of_Building_SQM_Approx__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Age of Building
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.Age_of_Building__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.Age_of_Building__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Condition of Building
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.Condition_of_Building__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.Condition_of_Building__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Working Hours
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.Working_Hours__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.Working_Hours__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Any Restriction for Gender of Technician
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.Any_Restriction_for_Gender_of_Technician__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.Any_Restriction_for_Gender_of_Technician__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12" align="bottom">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Number of Offices for Office / Mixed Use Buildings
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.No_Of_Offcs_for_OffcMixed_Use_Bldg__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.No_Of_Offcs_for_OffcMixed_Use_Bldg__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12" align="bottom">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                No of Technicians Currently on site
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.No_of_Technicians_Currently_on_site__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.No_of_Technicians_Currently_on_site__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12" align="bottom">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                No of Techncins Suggested by the Visitor to Run the Operations
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.No_Of_Tech_Suggstd_by_Vstr_to_run_Opn__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.No_Of_Tech_Suggstd_by_Vstr_to_run_Opn__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Number of Appartments for Residential Buildings
+                            </label>
+                            <div class="slds-form-element__control" >
+                                <label class="slds-form-element__label">
+                                    1BR
+                                </label>
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.XBR_1BR_Apartment__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.XBR_1BR_Apartment__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <label class="slds-form-element__label">
+                                    2BR
+                                </label>
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.XBR_2BR_Apartment__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.XBR_2BR_Apartment__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <label class="slds-form-element__label">
+                                    3BR
+                                </label>
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.XBR_3BR_Apartment__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.XBR_3BR_Apartment__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <label class="slds-form-element__label">
+                                    Others
+                                </label>
+                                <apex:Inputfield styleClass="slds-input" value="{!Sv.Others__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Sv.Others__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+            </div>
+
+
+            <h3 class="slds-section__title">
+                <button aria-controls="expando-unique-id" aria-expanded="true" onclick="return false;"
+                        class="slds-button slds-section__title-action">
+                    <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left"
+                         aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="{!URLFOR($Asset.SLDS,'/assets/icons/utility-sprite/svg/symbols.svg#switch')}"/>
+                    </svg>
+                    <span class="slds-truncate" title="Section Title">Specialized Subcontractors Information</span>
+                </button>
+            </h3>
+
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                <tr class="slds-line-height_reset">
+
+                    <th class="slds-text-title_caps" scope="col" >
+                        <div class="slds-truncate" title="Asset/System Name" >Asset/System Name</div>
+                    </th>
+
+                    <th class="slds-text-title_caps" scope="col" >
+                        <div class="slds-truncate" title="Present at Site" >Present <br/> at Site</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col" >
+                        <div class="slds-truncate" title="Quantity">Quantity</div>
+                    </th>
+
+                    <th class="slds-text-title_caps" scope="col" >
+                        <div class="slds-truncate" title="Make">Make</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Capacity">Capacity</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Name of Existing Subcontractor">Name of Existing<br/> Subcontractor</div>
+                    </th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <apex:repeat value="{!SVDLST}" var="Abc" >
+                    <tr>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" >
+                                <apex:outputField value="{!Abc.Name}" />
+                            </div>
+                        </th>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" width="" >
+                                <apex:inputField value="{!Abc.Present_at_Site_Yes_No__c}"  rendered="{!showAsInput}"/>
+                                <apex:Outputtext value="{!IF(Abc.Present_at_Site_Yes_No__c  ,'Yes','No')}" rendered="{!showAsOutput}"/>
+                            </div> 
+                        </th>
+                        <th scope="row" data-label=""  >
+                            <div class="slds-truncate" title="" style="width:50px" >
+                                <apex:inputField value="{!Abc.Quantity__c}"  rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Abc.Quantity__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" style="width:70px">
+                                <apex:inputField value="{!Abc.Make__c}"  rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Abc.Make__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+                        <th scope="row" data-label="" style="width:50px">
+                            <div class="slds-truncate" title="" style="width:50px">
+                               <apex:inputField value="{!Abc.Capacity__c}"  rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Abc.Capacity__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" style="width:160px">
+                               <apex:inputField value="{!Abc.Name_of_Existing_Subcontractor__c}" rendered="{!showAsInput}"/>
+                               <apex:outputField value="{!Abc.Name_of_Existing_Subcontractor__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+                    </tr>
+                </apex:repeat>
+                </tbody>
+            </table>
+
+
+            <h3 class="slds-section__title">
+                <button aria-controls="expando-unique-id" aria-expanded="true" onclick="return false;"
+                        class="slds-button slds-section__title-action">
+                    <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left"
+                         aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="{!URLFOR($Asset.SLDS,'/assets/icons/utility-sprite/svg/symbols.svg#switch')}"/>
+                    </svg>
+                    <span class="slds-truncate" title="Soft Services Information">Soft Services Information</span>
+                </button>
+            </h3>
+
+
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                <tr class="slds-line-height_reset">
+
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Service" >Service</div>
+                    </th>
+
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Number of Existing Staff" >Number of  <br/> Existing <br/> Staff</div>
+                    </th>
+
+                    <th class="slds-text-title_caps" scope="col" >
+                        <div class="slds-truncate" title="Working Hours" >Working  <br/> Hours</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="No of Skips for WM">No of Skips  <br/> for WM</div>
+                    </th>
+
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Size of Skips for WM">Size of Skips  <br/> for WM</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Removal Frequency for WM">Removal  <br/> Frequency <br/> for WM</div>
+                    </th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <!-- <apex:repeat value="{!Srvc}" var="Services" > -->
+                <apex:repeat value="{!Srvc}" var="Services" >
+
+                    <tr>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" >
+                                <apex:outputField value="{!Services.Name}" />
+                            </div>
+                        </th>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" style="width:60px" >
+                                <apex:inputField value="{!Services.No_of_Existing_Staff__c}"  rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Services.No_of_Existing_Staff__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" width=""  style="width:60px">
+                                <apex:inputField value="{!Services.Working_Hours__c}"    rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Services.Working_Hours__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" style="width:60px">
+                                <apex:inputField value="{!Services.No_of_Skips_for_WM__c}"  rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Services.No_of_Skips_for_WM__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" style="width:60px">
+                                <apex:inputField value="{!Services.Size_of_Skips_for_WM__c}"  rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Services.Size_of_Skips_for_WM__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+                        <th scope="row" data-label="">
+                            <div class="slds-truncate" title="" style="width:80px">
+                                <apex:inputField value="{!Services.Removal_Frequency_for_WM__c}"  rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!Services.Removal_Frequency_for_WM__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </th>
+
+                    </tr>
+                </apex:repeat>
+                </tbody>
+            </table>
+
+
+            <div class="slds-section slds-is-open"
+                 style="width:100%; margin: 0 auto; border:1px solid #f3f2f2;border-radius:20px;margin-top:10px;">
+
+
+                    <h3 class="slds-section__title">
+                        <button aria-controls="expando-unique-id" aria-expanded="true" onclick="return false;"
+                                class="slds-button slds-section__title-action">
+                            <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left"
+                                 aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                     xlink:href="{!URLFOR($Asset.SLDS,'/assets/icons/utility-sprite/svg/symbols.svg#switch')}"/>
+                            </svg>
+                            <span class="slds-truncate" title="Cleaning Equipment, Consumables and Toiletries Information">Cleaning Equipment, Consumables and Toiletries Information</span>
+                        </button>
+                    </h3>
+
+
+
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Cleaning Chemicals Quantities
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="CleaningChemicalsQuantities" styleClass="slds-input" value="{!SV.Cleaning_Chemicals_Quantities__c}"
+                                                 rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Cleaning_Chemicals_Quantities__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Cleaning Chemicals Cost
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="CleaningChemicalsCost" styleClass="slds-input" value="{!SV.Cleaning_Chemicals__c}"
+                                                 rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Cleaning_Chemicals__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Consumables Quantities
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="ConsumablesQuantities" styleClass="slds-input" value="{!SV.Consumables_Quantities__c}"
+                                                 rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Consumables_Quantities__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Consumables Cost
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="ConsumablesCost" styleClass="slds-input" value="{!SV.Consumables_Cost__c}"
+                                                 rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Consumables_Cost__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                         <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                No Of Male Toilets / Cubicles
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="NoOfMaleToilets" styleClass="slds-input" value="{!SV.No_Of_Male_Toilets_Cubicles__c}"
+                                                 rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.No_Of_Male_Toilets_Cubicles__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                     </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                No Of Female Toilets / Cubicles
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="NoOfFemaleToilets" styleClass="slds-input" value="{!SV.No_Of_Female_Toilets_Cubicles__c}"
+                                                 rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.No_Of_Female_Toilets_Cubicles__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                         </div>
+                     </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Type of Floor
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="TypeofFloor" styleClass="slds-input" value="{!SV.Type_of_Floor__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Type_of_Floor__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                Dispensers for Toiletries Installed
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="DispensersforToiletriesInstalled" styleClass="slds-input"
+                                                 value="{!SV.Dispensers_for_Toiletries_Installed__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Dispensers_for_Toiletries_Installed__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                        <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                            <label class="slds-form-element__label">
+                                No of Visitors (Foot Fall) / Day
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField id="NoofVisitors" styleClass="slds-input" value="{!SV.No_of_Visitors_Foot_Fall_Day__c}"
+                                                 rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.No_of_Visitors_Foot_Fall_Day__c}" rendered="{!showAsOutput}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                         <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+                                <label class="slds-form-element__label">
+                                    Equipment Required
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="EquipmentRequired" styleClass="slds-input" value="{!SV.Equipment_Required__c}"
+                                                     rendered="{!showAsInput}"/>
+                                    <apex:outputField value="{!SV.Equipment_Required__c}" rendered="{!showAsOutput}"/>
+                                </div>
+                         </div>
+                    </div>
+
+                    <!--  </div> -->
+                </div>
+            </div>
+
+
+            <h3 class="slds-section__title">
+                <button aria-controls="expando-unique-id" aria-expanded="true" onclick="return false;"
+                        class="slds-button slds-section__title-action">
+                    <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left"
+                         aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="{!URLFOR($Asset.SLDS,'/assets/icons/utility-sprite/svg/symbols.svg#switch')}"/>
+                    </svg>
+                    <span class="slds-truncate" title="General Observations/Remarks">General Observations/Remarks</span>
+                </button>
+            </h3>
+
+            <div >
+                <div class="slds-form-element slds-p-around--medium" style="padding:0.5rem;">
+
+                    <div class="slds-form-element__control"  style="width:100% ">
+                                <label class="slds-form-element__label">
+                                    General Observations/Remarks
+                                </label>
+                                <apex:inputField id="GeneralObservation" styleClass="slds-input" value="{!SV.General_Observations_Remarks__c}"
+                                                 rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.General_Observations_Remarks__c}" rendered="{!showAsOutput}"/>
+
+
+                                 <label class="slds-form-element__label">
+                                    Big Remarks
+                                </label>
+
+                                <apex:inputField style="width:100% " value="{!SV.Big_Remark__c}" rendered="{!showAsInput}"/>
+                                <apex:outputField value="{!SV.Big_Remark__c}" rendered="{!showAsOutput}"/>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <h3 class="slds-text-heading--label slds-text-font_monospace"   >
+                Note: Please fill as much information as possible.
+            </h3>
+
+
+
+
+            <!--</div> -->
+
+        </div>
+
+
+
+
+    </apex:form>
+    <script>function setFocusOnLoad() {}</script>
+
+
+</apex:page>
